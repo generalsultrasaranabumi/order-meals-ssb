@@ -8,28 +8,31 @@
 <link rel="icon" href="icon-192.png">
 <title>Order Meals PT SSB</title>
 <style>
-:root{--navy:#1F3864;--bg:#f3f5f9;--card:#fff;--line:#d9dee8;--mut:#667085;--ok:#137333;--bad:#b3261e;--warn:#fff4ce}
+:root{--navy:#1F3864;--bg:#f3f5f9;--card:#fff;--line:#d9dee8;--mut:#667085;--ok:#137333;--bad:#b3261e;--warn:#fff4ce;--khusus:#c25e00}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1c2333}
 body{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+body.dp{padding-bottom:30px}
 header{background:var(--navy);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;position:sticky;top:0;z-index:5}
 header h1{font-size:16px;margin:0}
 header small{opacity:.85}
 .row{display:flex;gap:8px;align-items:center}
-.wrap{max-width:720px;margin:0 auto;padding:10px 12px}
+.wrap{max-width:760px;margin:0 auto;padding:10px 12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
 label.f{display:block;font-size:12px;color:var(--mut);margin-bottom:3px}
 input,select,button{font:inherit}
 input[type=text],input[type=date],input[type=password],input[type=number],select{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;background:#fff}
-button{border:0;border-radius:9px;padding:11px 14px;background:var(--navy);color:#fff;font-weight:600}
+button{border:0;border-radius:9px;padding:11px 14px;background:var(--navy);color:#fff;font-weight:600;cursor:pointer}
 button.sec{background:#e8ecf4;color:var(--navy)}
 button:disabled{opacity:.5}
-#tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
 .tab{background:#e8ecf4;color:var(--navy);white-space:nowrap}
 .tab.on{background:var(--navy);color:#fff}
 #cutoff{font-size:13px;color:var(--mut);margin:4px 0 8px}
 .line{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:#fff}
 .line.extra{border-style:dashed}
+.line.khusus{border:1px dashed var(--khusus);background:#fff8ef}
+.badge{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--khusus);border-radius:6px;padding:1px 6px;margin-right:4px}
 .lt{display:flex;flex-direction:column;gap:2px;position:relative;padding-right:28px;margin-bottom:8px}
 .lt span{font-size:12px;color:var(--mut)}
 .x{position:absolute;right:0;top:0;background:#fde7e5;color:var(--bad);padding:4px 10px}
@@ -39,12 +42,32 @@ button:disabled{opacity:.5}
 .note{margin-top:8px;font-size:13px}
 .muted{color:var(--mut);font-size:13px}
 #bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));z-index:6}
-#bar .in{max-width:720px;margin:0 auto}
+#bar .in{max-width:760px;margin:0 auto}
 #tot{font-size:13px;margin-bottom:8px}
 #banner{background:var(--warn);padding:8px 12px;font-size:13px;display:none}
-#toast{position:fixed;left:12px;right:12px;bottom:calc(120px + env(safe-area-inset-bottom,0px));background:#202939;color:#fff;border-radius:10px;padding:10px 12px;font-size:14px;display:none;z-index:9;white-space:pre-line}
+#toast{position:fixed;left:12px;right:12px;bottom:calc(120px + env(safe-area-inset-bottom,0px));background:#202939;color:#fff;border-radius:10px;padding:10px 12px;font-size:14px;display:none;z-index:30;white-space:pre-line}
 .err{color:var(--bad);font-size:14px;margin-top:8px;white-space:pre-line}
 .hide{display:none!important}
+/* modal */
+#modal{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+#modalBox{background:#fff;width:100%;max-width:560px;max-height:88vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+#modalBox h3{margin:0 0 4px;color:var(--navy)}
+#modalBox h4{margin:14px 0 6px;color:var(--navy)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--mut);font-weight:600;font-size:12px}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr.sub td{font-weight:700;background:#f3f5f9}
+.gt{margin:12px 0;padding:10px;background:#eaf2ff;border-radius:10px;font-weight:700}
+.bad{color:var(--bad)}
+.sm{display:block;font-size:11px;color:var(--mut);font-weight:400}
+/* dapur */
+.dcard{padding:0;overflow:hidden}
+.dh{background:#eaf0fb;padding:10px 12px}
+.dh b{font-size:15px}
+.dbody{padding:4px 12px 8px}
+.pill{display:inline-block;background:#e8ecf4;border-radius:999px;padding:2px 9px;font-size:12px;margin-right:4px}
+@media print{header,.noprint,#toast{display:none!important}body{background:#fff}.card{break-inside:avoid}}
 </style>
 </head>
 <body>
@@ -52,7 +75,7 @@ button:disabled{opacity:.5}
 <section id="login" class="wrap" style="padding-top:40px">
   <div class="card">
     <h2 style="margin:0 0 4px;color:var(--navy)">Order Meals PT SSB</h2>
-    <p class="muted" style="margin:0 0 12px">Masukkan PIN departemen dari GA.</p>
+    <p class="muted" style="margin:0 0 12px">Masukkan PIN dari GA.</p>
     <label class="f" for="pin">PIN</label>
     <input id="pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off">
     <div class="err" id="loginErr"></div>
@@ -60,6 +83,7 @@ button:disabled{opacity:.5}
   </div>
 </section>
 
+<!-- Admin departemen -->
 <section id="app" class="hide">
   <header>
     <div class="row"><div style="flex:1"><h1 id="who"></h1><small>Order Meals PT SSB</small></div>
@@ -73,31 +97,78 @@ button:disabled{opacity:.5}
         <div style="flex:1"><label class="f" for="nama">Nama pemesan</label><input id="nama" type="text" maxlength="60"></div>
       </div>
     </div>
-    <div id="tabs"></div>
+    <div id="tabs" class="tabs"></div>
     <div id="cutoff"></div>
     <div class="row" style="margin-bottom:8px">
       <button class="sec" id="btnLast" style="flex:1">Salin pesanan terakhir</button>
       <button class="sec" id="btnClear" style="flex:1">Kosongkan angka</button>
     </div>
     <div id="lines"></div>
-    <div class="card" id="addBox">
-      <b style="font-size:14px">+ Titik lain</b>
-      <label class="f" for="addTitik" style="margin-top:8px">Titik pengantaran</label>
-      <select id="addTitik"></select>
-      <label class="f" for="addPer" style="margin-top:8px">Peruntukan</label>
-      <input id="addPer" type="text" maxlength="100" placeholder="Contoh: Tim Workshop">
-      <button class="sec" id="btnAdd" style="margin-top:10px;width:100%">Tambahkan</button>
+    <div id="addBoxes">
+      <div class="card">
+        <b style="font-size:14px">+ Titik lain</b>
+        <label class="f" for="addTitik" style="margin-top:8px">Titik pengantaran</label>
+        <select id="addTitik"></select>
+        <label class="f" for="addPer" style="margin-top:8px">Peruntukan</label>
+        <input id="addPer" type="text" maxlength="100" placeholder="Contoh: Tim Workshop">
+        <button class="sec" id="btnAdd" style="margin-top:10px;width:100%">Tambahkan</button>
+      </div>
+      <div class="card" style="border-color:var(--khusus)">
+        <b style="font-size:14px;color:var(--khusus)">+ Order khusus</b>
+        <div class="muted">Tamu departemen, meeting, prasmanan, atau lainnya.</div>
+        <label class="f" for="kJenis" style="margin-top:8px">Jenis order</label>
+        <select id="kJenis">
+          <option>Tamu departemen</option><option>Meeting departemen</option><option>Prasmanan</option><option>Lainnya</option>
+        </select>
+        <label class="f" for="kKet" style="margin-top:8px">Keterangan</label>
+        <input id="kKet" type="text" maxlength="70" placeholder="Contoh: Tamu dari Jakarta, rapat bulanan">
+        <label class="f" for="kTitik" style="margin-top:8px">Titik pengantaran</label>
+        <select id="kTitik"></select>
+        <div class="muted" style="margin-top:4px">Jika lokasi tidak ada di daftar, pilih "Lokasi lain (tulis di catatan)" lalu isi lokasinya di kolom catatan.</div>
+        <button class="sec" id="btnKhusus" style="margin-top:10px;width:100%">Tambahkan order khusus</button>
+      </div>
     </div>
   </div>
   <div id="bar"><div class="in">
     <div id="tot"></div>
-    <button id="btnSend" style="width:100%">Kirim pesanan</button>
+    <button id="btnSend" style="width:100%">Periksa dan kirim pesanan</button>
   </div></div>
 </section>
+
+<!-- Monitoring dapur -->
+<section id="dapur" class="hide">
+  <header>
+    <div class="row"><div style="flex:1"><h1>Monitoring Dapur</h1><small>Order Meals PT SSB</small></div>
+    <button class="sec noprint" id="dOut" style="padding:7px 10px">Keluar</button></div>
+  </header>
+  <div class="wrap">
+    <div class="card noprint">
+      <label class="f" for="dTgl">Tanggal makan</label>
+      <div class="row">
+        <input id="dTgl" type="date" style="flex:2">
+        <button class="sec" id="dToday" style="flex:1">Hari ini</button>
+        <button class="sec" id="dTomorrow" style="flex:1">Besok</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button id="dReload" style="flex:1">Muat ulang</button>
+        <button class="sec" id="dPrint" style="flex:1">Cetak</button>
+      </div>
+      <div class="muted" id="dStamp" style="margin-top:6px"></div>
+    </div>
+    <div class="card" id="dSum"></div>
+    <div id="dTabs" class="tabs noprint"></div>
+    <div id="dInfo" class="muted" style="margin:6px 0 8px"></div>
+    <div id="dBody"></div>
+  </div>
+</section>
+
+<div id="modal" class="hide"><div id="modalBox"></div></div>
 <div id="toast"></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwvZHJ5FW34AtseIhcsEqmKEWaLM6L6dg1PCMTXT21v03oi6vUVJN2LgSJjNLL2QgozGg/exec";   // contoh: https://script.google.com/macros/s/XXXX/exec
+const API_URL = "https://script.google.com/macros/s/AKfycbwvZHJ5FW34AtseIhcsEqmKEWaLM6L6dg1PCMTXT21v03oi6vUVJN2LgSJjNLL2QgozGg/exec
+
+";   // contoh: https://script.google.com/macros/s/XXXX/exec
 
 const $ = s => document.querySelector(s);
 const LS = {
@@ -108,6 +179,11 @@ const LS = {
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const ymd = d => d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
 const num = v => { const n = parseInt(v, 10); return isFinite(n) && n > 0 ? n : 0; };
+const isKhusus = p => String(p || "").indexOf("Khusus") === 0;
+function fmtTgl(s){
+  const a = s.split("-"); const d = new Date(+a[0], +a[1]-1, +a[2]);
+  return d.toLocaleDateString("id-ID", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+}
 
 let S = { pin:null, meta:null, tanggal:null, periode:null, orders:{}, offlineLoad:false };
 
@@ -126,7 +202,7 @@ async function call(body){
 let toastT;
 function toast(msg){
   const t = $("#toast"); t.textContent = msg; t.style.display = "block";
-  clearTimeout(toastT); toastT = setTimeout(() => { t.style.display = "none"; }, 4500);
+  clearTimeout(toastT); toastT = setTimeout(() => { t.style.display = "none"; }, 5000);
 }
 
 /* ---------- Login ---------- */
@@ -146,27 +222,33 @@ async function login(pin, silent){
   }
 }
 
+async function route(){
+  $("#login").classList.add("hide");
+  if(S.meta.role === "dapur") await enterDapur(); else await enterApp();
+}
+
+/* ======================= ADMIN DEPARTEMEN ======================= */
 async function enterApp(){
-  $("#login").classList.add("hide"); $("#app").classList.remove("hide");
+  $("#app").classList.remove("hide");
   $("#who").textContent = S.meta.departemen;
   $("#nama").value = LS.get("om_nama", "");
   const t = new Date(); t.setDate(t.getDate() + 1);
   $("#tgl").value = ymd(t); $("#tgl").min = ymd(new Date());
   S.tanggal = $("#tgl").value;
   S.periode = S.meta.periode[0];
-  buildAddSelect();
+  buildAddSelects();
   await loadDate();
   flushQueue();
 }
 
-function buildAddSelect(){
+function buildAddSelects(){
   const groups = {};
   S.meta.titik.forEach(t => { (groups[t.area || "Lainnya"] = groups[t.area || "Lainnya"] || []).push(t.titik); });
-  $("#addTitik").innerHTML = Object.keys(groups).sort().map(a =>
+  const html = Object.keys(groups).sort().map(a =>
     `<optgroup label="${esc(a)}">${groups[a].map(t => `<option>${esc(t)}</option>`).join("")}</optgroup>`).join("");
+  $("#addTitik").innerHTML = html; $("#kTitik").innerHTML = html;
 }
 
-/* ---------- Data pesanan ---------- */
 function buildLines(saved){
   const used = new Set();
   const lines = S.meta.langganan.map(s => ({ titik:s.titik, peruntukan:s.peruntukan, packmeal:0, canteen:0, catatan:"", sub:true }));
@@ -199,7 +281,6 @@ function showBanner(){
   b.style.display = msgs.length ? "block" : "none"; b.textContent = msgs.join(" ");
 }
 
-/* ---------- Tampilan ---------- */
 function render(){ renderTabs(); renderLines(); renderTotals(); }
 
 function renderTabs(){
@@ -214,10 +295,10 @@ function renderLines(){
   if(!o){ box.innerHTML = ""; return; }
   $("#cutoff").textContent = o.locked ? "Pemesanan periode ini sudah ditutup." : (o.cutoff ? "Batas pesan: " + o.cutoff + " WITA" : "");
   const dis = o.locked ? "disabled" : "";
-  $("#addBox").classList.toggle("hide", o.locked);
+  $("#addBoxes").classList.toggle("hide", o.locked);
   box.innerHTML = o.lines.map((l, i) => `
-    <div class="line ${l.sub ? "" : "extra"}">
-      <div class="lt"><b>${esc(l.titik)}</b><span>${esc(l.peruntukan)}</span>${l.sub || o.locked ? "" : `<button class="x" data-del="${i}">×</button>`}</div>
+    <div class="line ${isKhusus(l.peruntukan) ? "khusus" : (l.sub ? "" : "extra")}">
+      <div class="lt"><b>${esc(l.titik)}</b><span>${isKhusus(l.peruntukan) ? '<i class="badge">KHUSUS</i>' : ""}${esc(l.peruntukan)}</span>${l.sub || o.locked ? "" : `<button class="x" data-del="${i}">×</button>`}</div>
       <div class="qs">
         <label>Packmeal<input type="number" inputmode="numeric" min="0" max="999" data-i="${i}" data-f="packmeal" value="${l.packmeal || ""}" placeholder="0" ${dis}></label>
         <label>Canteen<input type="number" inputmode="numeric" min="0" max="999" data-i="${i}" data-f="canteen" value="${l.canteen || ""}" placeholder="0" ${dis}></label>
@@ -236,24 +317,25 @@ function renderTotals(){
   const c = sums(S.periode); let ap = 0, ac = 0;
   S.meta.periode.forEach(p => { const s = sums(p); ap += s.pm; ac += s.cn; });
   $("#tot").innerHTML = `<b>${esc(S.periode)}</b>: ${c.pm} packmeal + ${c.cn} canteen = <b>${c.pm + c.cn}</b> porsi<br><span class="muted">Semua periode: ${ap} + ${ac} = ${ap + ac} porsi</span>`;
-  const anyDirty = S.meta.periode.some(p => S.orders[p] && S.orders[p].dirty && !S.orders[p].locked);
-  $("#btnSend").disabled = !anyDirty;
+  const anyD = S.meta.periode.some(p => S.orders[p] && S.orders[p].dirty && !S.orders[p].locked);
+  $("#btnSend").disabled = !anyD;
 }
 
-/* ---------- Event ---------- */
+/* ---------- Event admin ---------- */
 $("#btnLogin").onclick = async () => {
   $("#loginErr").textContent = "";
   const pin = $("#pin").value.trim();
   if(!/^\d{4,8}$/.test(pin)){ $("#loginErr").textContent = "PIN terdiri dari 4 sampai 8 angka."; return; }
   $("#btnLogin").disabled = true;
-  if(await login(pin, false)) await enterApp();
+  if(await login(pin, false)) await route();
   $("#btnLogin").disabled = false;
 };
 $("#pin").addEventListener("keydown", e => { if(e.key === "Enter") $("#btnLogin").click(); });
-$("#btnOut").onclick = () => {
+function logout(){
   if(!confirm("Keluar dari aplikasi?")) return;
   LS.del("om_pin"); LS.del("om_meta"); location.reload();
-};
+}
+$("#btnOut").onclick = logout; $("#dOut").onclick = logout;
 $("#nama").addEventListener("change", e => LS.set("om_nama", e.target.value.trim()));
 
 function anyDirty(){ return S.meta.periode.some(p => S.orders[p] && S.orders[p].dirty); }
@@ -284,6 +366,15 @@ $("#btnAdd").onclick = () => {
   o.dirty = true; $("#addPer").value = ""; render();
   toast("Titik ditambahkan. Isi jumlahnya di daftar.");
 };
+$("#btnKhusus").onclick = () => {
+  const jenis = $("#kJenis").value, ket = $("#kKet").value.trim(), titik = $("#kTitik").value;
+  if(!titik) return toast("Pilih titik pengantaran.");
+  if(!ket) return toast("Isi keterangan order khusus, misalnya nama tamu atau acara.");
+  const o = S.orders[S.periode];
+  o.lines.push({ titik, peruntukan:("Khusus - " + jenis + ": " + ket).slice(0, 100), packmeal:0, canteen:0, catatan:"", sub:false });
+  o.dirty = true; $("#kKet").value = ""; render();
+  toast("Order khusus ditambahkan. Isi jumlah porsinya di daftar.");
+};
 $("#btnClear").onclick = () => {
   if(!confirm("Kosongkan semua angka pada periode " + S.periode + "?")) return;
   const o = S.orders[S.periode]; o.lines.forEach(l => { l.packmeal = 0; l.canteen = 0; }); o.dirty = true; render();
@@ -299,7 +390,7 @@ $("#btnLast").onclick = async () => {
   }catch(e){ toast(e.net ? "Perlu koneksi untuk menyalin pesanan terakhir." : e.message); }
 };
 
-/* ---------- Kirim & antrean offline ---------- */
+/* ---------- Dialog periksa pesanan, lalu kirim ---------- */
 function buildPayload(){
   const nama = $("#nama").value.trim();
   const orders = [];
@@ -311,17 +402,38 @@ function buildPayload(){
   return { action:"submit", pin:S.pin, tanggal:S.tanggal, nama, orders };
 }
 
+function confirmSend(payload){
+  return new Promise(resolve => {
+    let gp = 0, gc = 0;
+    let html = `<h3>Periksa pesanan Anda</h3>
+      <div class="muted">${esc(S.meta.departemen)} &bull; ${esc(fmtTgl(payload.tanggal))}<br>Pemesan: <b>${esc(payload.nama)}</b></div>`;
+    payload.orders.forEach(o => {
+      let pm = 0, cn = 0; o.lines.forEach(l => { pm += l.packmeal; cn += l.canteen; });
+      gp += pm; gc += cn;
+      html += `<h4>${esc(o.periode)}</h4>`;
+      if(!o.lines.length){ html += `<p class="bad"><b>Pesanan periode ini akan DIHAPUS</b> (semua angka 0).</p>`; return; }
+      html += `<table><tr><th>Titik pengantaran</th><th class="n">Pack</th><th class="n">Kantin</th></tr>` +
+        o.lines.map(l => `<tr><td><b>${esc(l.titik)}</b><span class="sm">${isKhusus(l.peruntukan) ? '<i class="badge">KHUSUS</i>' : ""}${esc(l.peruntukan)}${l.catatan ? " &bull; <i>" + esc(l.catatan) + "</i>" : ""}</span></td><td class="n">${l.packmeal}</td><td class="n">${l.canteen}</td></tr>`).join("") +
+        `<tr class="sub"><td>Subtotal ${esc(o.periode)}</td><td class="n">${pm}</td><td class="n">${cn}</td></tr></table>`;
+    });
+    html += `<div class="gt">Total: ${gp} packmeal + ${gc} canteen = ${gp + gc} porsi</div>
+      <div class="muted" style="margin-bottom:10px">Pastikan titik pengantaran dan jumlahnya sudah benar. Pesanan lama pada tanggal dan periode yang sama akan diganti.</div>
+      <div class="row"><button class="sec" id="mNo" style="flex:1">Periksa lagi</button><button id="mYes" style="flex:1">Ya, kirim</button></div>`;
+    $("#modalBox").innerHTML = html;
+    $("#modal").classList.remove("hide");
+    const close = v => { $("#modal").classList.add("hide"); $("#modalBox").innerHTML = ""; resolve(v); };
+    $("#mNo").onclick = () => close(false);
+    $("#mYes").onclick = () => close(true);
+  });
+}
+
 $("#btnSend").onclick = async () => {
   const nama = $("#nama").value.trim();
   if(!nama) return toast("Isi nama pemesan dulu.");
   LS.set("om_nama", nama);
   const payload = buildPayload();
   if(!payload.orders.length) return toast("Belum ada perubahan untuk dikirim.");
-  const ringkas = payload.orders.map(o => {
-    let pm = 0, cn = 0; o.lines.forEach(l => { pm += l.packmeal; cn += l.canteen; });
-    return o.periode + ": " + pm + " packmeal, " + cn + " canteen" + (o.lines.length ? "" : " (pesanan dihapus)");
-  }).join("\n");
-  if(!confirm("Kirim pesanan untuk " + S.tanggal + "?\n\n" + ringkas)) return;
+  if(!(await confirmSend(payload))) return;
   $("#btnSend").disabled = true;
   try{
     const r = await call(payload);
@@ -361,15 +473,91 @@ async function flushQueue(){
       }
     }
   } finally { flushing = false; showBanner(); }
-  if(!qlen() && S.meta && !anyDirty()) loadDate();
+  if(!qlen() && S.meta && S.meta.role !== "dapur" && !anyDirty()) loadDate();
 }
 window.addEventListener("online", flushQueue);
+
+/* ======================= MONITORING DAPUR ======================= */
+let D = { data:null, periode:null, timer:null };
+
+async function enterDapur(){
+  document.body.classList.add("dp");
+  $("#dapur").classList.remove("hide");
+  $("#dTgl").value = ymd(new Date());
+  D.periode = S.meta.periode[0];
+  await dLoad();
+  clearInterval(D.timer);
+  D.timer = setInterval(() => { if(!document.hidden) dLoad(true); }, 60000);
+}
+
+async function dLoad(quiet){
+  if(!$("#dTgl").value) return;
+  try{
+    D.data = await call({ action:"monitor", pin:S.pin, tanggal:$("#dTgl").value });
+    $("#dStamp").textContent = "Diperbarui pukul " + D.data.diperbaruiPada + " WITA (otomatis tiap 1 menit)";
+    dRender();
+  }catch(e){
+    if(!quiet || !e.net) toast(e.net ? "Tidak ada koneksi. Data yang tampil bisa sudah lama." : e.message);
+  }
+}
+
+function dTotals(dep){
+  let pm = 0, cn = 0; dep.lines.forEach(l => { pm += l.packmeal; cn += l.canteen; });
+  return { pm, cn };
+}
+
+function dRender(){
+  const d = D.data; if(!d) return;
+  // ringkasan semua periode
+  let rows = "", gp = 0, gc = 0;
+  d.periode.forEach(p => {
+    const depts = d.orders[p].depts; let pm = 0, cn = 0, n = 0;
+    Object.keys(depts).forEach(k => { const t = dTotals(depts[k]); pm += t.pm; cn += t.cn; n++; });
+    gp += pm; gc += cn;
+    rows += `<tr><td><b>${esc(p)}</b>${d.orders[p].locked ? " 🔒" : ""}</td><td class="n">${pm}</td><td class="n">${cn}</td><td class="n"><b>${pm + cn}</b></td><td class="n">${n}/${d.departemen.length}</td></tr>`;
+  });
+  $("#dSum").innerHTML = `<b>${esc(fmtTgl(d.tanggal))}</b>
+    <table style="margin-top:8px"><tr><th>Periode</th><th class="n">Pack</th><th class="n">Kantin</th><th class="n">Total</th><th class="n">Dept</th></tr>${rows}
+    <tr class="sub"><td>Semua periode</td><td class="n">${gp}</td><td class="n">${gc}</td><td class="n">${gp + gc}</td><td></td></tr></table>`;
+  // tab periode
+  $("#dTabs").innerHTML = d.periode.map(p => {
+    let t = 0; Object.keys(d.orders[p].depts).forEach(k => { const x = dTotals(d.orders[p].depts[k]); t += x.pm + x.cn; });
+    return `<button class="tab ${p === D.periode ? "on" : ""}" data-p="${esc(p)}">${esc(p)} (${t})</button>`;
+  }).join("");
+  const o = d.orders[D.periode];
+  $("#dInfo").textContent = (o.locked ? "Pemesanan ditutup" : "Pemesanan masih terbuka") + " • batas: " + o.cutoff + " WITA";
+  // kartu per departemen
+  const ordered = d.departemen.filter(k => o.depts[k]);
+  const extra = Object.keys(o.depts).filter(k => d.departemen.indexOf(k) < 0);
+  const list = ordered.concat(extra);
+  let html = "";
+  list.forEach(k => {
+    const dep = o.depts[k], t = dTotals(dep);
+    html += `<div class="card dcard"><div class="dh"><b>${esc(k)}</b>
+      <div style="margin-top:4px"><span class="pill">${t.pm} packmeal</span><span class="pill">${t.cn} kantin</span><span class="pill"><b>${t.pm + t.cn} porsi</b></span></div>
+      <div class="muted" style="margin-top:4px">${esc(dep.nama)} &bull; ${esc(dep.diperbarui)}</div></div>
+      <div class="dbody"><table><tr><th>Titik pengantaran</th><th class="n">Pack</th><th class="n">Kantin</th></tr>` +
+      dep.lines.map(l => `<tr><td><b>${esc(l.titik)}</b><span class="sm">${isKhusus(l.peruntukan) ? '<i class="badge">KHUSUS</i>' : ""}${esc(l.peruntukan)}${l.catatan ? " &bull; <i>" + esc(l.catatan) + "</i>" : ""}</span></td><td class="n">${l.packmeal}</td><td class="n">${l.canteen}</td></tr>`).join("") +
+      `</table></div></div>`;
+  });
+  const belum = d.departemen.filter(k => !o.depts[k]);
+  if(!list.length) html = '<div class="card muted">Belum ada pesanan untuk periode ini.</div>';
+  if(belum.length) html += `<div class="card"><b style="font-size:13px">Belum ada order (${belum.length})</b><div class="muted" style="margin-top:4px">${belum.map(esc).join(", ")}</div></div>`;
+  $("#dBody").innerHTML = html;
+}
+
+$("#dTabs").addEventListener("click", e => { const b = e.target.closest("[data-p]"); if(!b) return; D.periode = b.dataset.p; dRender(); });
+$("#dTgl").addEventListener("change", () => dLoad());
+$("#dReload").onclick = () => dLoad();
+$("#dPrint").onclick = () => window.print();
+$("#dToday").onclick = () => { $("#dTgl").value = ymd(new Date()); dLoad(); };
+$("#dTomorrow").onclick = () => { const t = new Date(); t.setDate(t.getDate() + 1); $("#dTgl").value = ymd(t); dLoad(); };
 
 /* ---------- Mulai ---------- */
 (async function init(){
   if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
   const pin = LS.get("om_pin", null);
-  if(pin && await login(pin, true)) await enterApp();
+  if(pin && await login(pin, true)) await route();
 })();
 </script>
 </body>
